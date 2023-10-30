@@ -1,0 +1,98 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+    - howdy
+    - yo what's up
+    - hi this is [mike](name)
+    - [sonja](name) here, hello
+    - hey this is [tess](name)
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: inform
+  examples: |
+    - i would like to book a table
+    - i'd like to reserve a table for [two](number_guests)
+    - do you have a table for (four)[number_guests]
+    - [four](number_guests)
+    - [two](number_guests)
+    - [six](number_guests) people in total
+    - we will be [three](number_guests)
+    - hi this is [eva](name). i would like to reserve a table for [one](number_guests)
+    - [milos](name)
+    - [tess](name)
+    - [maeve](name)
+    - yes
+    - my name is [tom](name)
+    - you can use [maria](name)
+
+- intent: confirm_booking
+  examples: |
+    - great let's book it
+    - awesome thank you
+    - okay please reserve it
+    - thanks
+    - that's great, thanks much
+    - yes please
+    - yes
+    - okay
+    - sure
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: out_of_scope
+  examples: |
+    - what kind of cuisine do you have?
+    - what food do you serve?
+    - what are your opening hours?
+    - are you a bot?
+    - are you a real person?
+    - where are you guys located?
+    - where is your restaurant?
+    - i need directions to your restaurant
+    - can i talk to
+
+- lookup: number_guests
+  examples: |
+    - one
+    - two
+    - three
+    - four
+    - five
+    - six
+    - seven
+    - eight

@@ -1,0 +1,124 @@
+version: "3.1"
+
+stories:
+
+- story: available table 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+    entities:
+    - number_guests: "two"
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - action: utter_confirm_availability
+  - intent: confirm_booking
+  - action: utter_inquire_name
+  - intent: inform
+    entities:
+    - name: "milos"
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: available table 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+    entities:
+    - number_guests: "five"
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - action: utter_confirm_availability
+  - intent: confirm_booking
+  - action: utter_inquire_name
+  - intent: inform
+    entities:
+    - name: "tess"
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: goodbye
+  - action: utter_goodbye
+
+# - story: available table 1
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: inform
+#   - action: table_booking_form
+# #  - action: utter_checking
+#   - action: action_check_availability
+#   - slot_was_set:
+#     - booking_available: true
+#   - action: utter_confirm_availability
+#   - intent: confirm_booking
+#   - action: action_book_appointment
+#   - action: utter_final_confirmation
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+# - story: available table 2
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: inform
+#     entities:
+#     - number_guests: "five"
+#   - action: table_booking_form
+# #  - action: utter_checking
+#   - action: action_check_availability
+#   - slot_was_set:
+#     - booking_available: true
+#   - action: utter_confirm_availability
+#   - intent: confirm_booking
+#   - action: action_book_appointment
+#   - action: utter_final_confirmation
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+# - story: available table 3
+#   steps:
+#   - intent: greet
+#     entities:
+#     - name: "toby"
+#   - action: utter_greet
+#   - intent: inform
+#     entities:
+#     - number_guests: "five"
+#   - action: table_booking_form
+#   - action: utter_checking
+#   - action: utter_confirm_availability
+#   - intent: confirm_booking
+#   - action: utter_final_confirmation
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+# - story: available table 4
+#   steps:
+#   - intent: inform
+#     entities:
+#     - number_guests: "five"
+#   - action: table_booking_form
+#   - action: utter_checking
+#   - action: utter_confirm_availability
+#   - intent: confirm_booking
+#   - action: utter_final_confirmation
+#   - intent: goodbye
+#   - action: utter_goodbye
+
+- story: available table 5
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+    entities:
+    - number_guests: "three"
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: false
+  - action: utter_nogo_atm
+  - action: utter_goodbye
