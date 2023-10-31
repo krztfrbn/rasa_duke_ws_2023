@@ -5,6 +5,8 @@ intents:
 - goodbye
 - greet
 - inform
+- nlu_fallback
+- out_of_scope
 entities:
 - number_guests
 - date
@@ -88,7 +90,7 @@ responses:
   - text: For how many people?
   - text: What's your party's size?
   - text: How big is your party?
-  utter_inquire_name:
+  utter_ask_name:
   - text: Under what name?
   - text: What's your name please?
   - text: Can you give me a name for the reservation?
@@ -99,7 +101,7 @@ responses:
   - text: Great, so you'd like to book a table for {number_guests} on {date} at {time}, correct?
   utter_confirm_availability:
   - text: We do have a table available for {number_guests} people at that time. Do you want to confirm your booking?
-  - text: Good news! We have a table on {date} at {time} for {number_guests} guests. What's your name?
+  - text: Good news! We have a table on {date} at {time} for {number_guests} guests. You want it?
   utter_final_confirmation:
   - text: Okay great you're all set for {number_guests} people. See you then, {name}!
   - text: Booking for {number_guests} with the name {name} ... done!
@@ -118,12 +120,14 @@ responses:
   utter_nogo_atm:
   - text: I'm sorry but you already booked with us. Please don't ever call use again.
 actions:
+- utter_nogo_atm
+- utter_greet
+- utter_out_of_scope
 - utter_ask_number_guests
 - utter_final_confirmation
 - utter_goodbye
 - action_book_appointment
 - action_check_availability
-- utter_greet
 - utter_confirm_availability
 - utter_ask_time
 - utter_ask_date_time

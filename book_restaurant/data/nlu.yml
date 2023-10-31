@@ -111,6 +111,11 @@ nlu:
     - where is your restaurant?
     - i need directions to your restaurant
     - can i talk to
+    - i'd like to know if you have vegan options on the menu?
+    - Do you have vegan food? Come on, just tell me!!
+- intent: nlu_fallback
+  examples: |
+    - idiot!
 - regex: date
   examples: |
     - (?:january|february|march|april|may|june|july|august|september|october|november|december) \d+(?:st|nd|rd|th)

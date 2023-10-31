@@ -14,7 +14,17 @@ from rasa_sdk.executor import CollectingDispatcher
 import sqlite3
 
 import dateparser
+import math
 
+# I'm assuming the following for my restaurant:
+# 6 tables, each table for up to 4 guests
+nr_tables = 6
+max_nr_guests_per_table = 4
+
+def get_nr_tables_needed(number_guests):
+  nr_tables_needed = math.ceil(number_guests/max_nr_guests_per_table)
+  print("number_guests: {0}, nr_tables_needed: {1}".format(number_guests, nr_tables_needed))
+  return nr_tables_needed
 
 
 class ActionHelloWorld(Action):
@@ -51,15 +61,31 @@ class ActionCheckAvailability(Action):
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()
 
-        sql = "SELECT * FROM reservations WHERE reserved_under = ?"
-        res = cursor.execute(sql, (tracker.get_slot('name'),))
+        sql = "SELECT * FROM reservations"
+        #res = cursor.execute(sql, (tracker.get_slot('name'),))
+        cursor.execute(sql)
+        records = cursor.fetchall()
 
-        #print(res.fetchall())
-
+        # Loop through existing bookings and count how many tables are already reserved around the given time
         booking_available = False
-        if len(res.fetchall()) == 0:
+        date_time_request = dateparser.parse(tracker.get_slot('date') + ' ' + tracker.get_slot('time'))
+        nr_reserved_tables = 0
+        nr_tables_needed = get_nr_tables_needed(int(tracker.get_slot('number_guests')))
+
+        for row in records:
+            date_time_booking = dateparser.parse(row[0])
+            date_diff = date_time_booking - date_time_request
+            print(date_diff.total_seconds())
+            if date_diff.total_seconds() > -7200 and date_diff.total_seconds() < 7200:
+                nr_reserved_tables += 1
+        print("{0} tables are taken around that time".format(nr_reserved_tables))
+        if nr_tables - nr_reserved_tables >= nr_tables_needed:
             booking_available = True
-            print("User has not booked yet")
+            print("Enough seating is available!")
+            booking_available = True
+        else:
+            print("Not enough tables available")
+            dispatcher.utter_message(text="I'm sorry but there's no table available at that time. What other time would work for you?")
 
         # Close connection
         conn.close()
@@ -75,18 +101,24 @@ class ActionBookAppointment(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        nr_tables_needed = get_nr_tables_needed(int(tracker.get_slot('number_guests')))
+
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()
 
         date_time_string = tracker.get_slot('date') + ' ' + tracker.get_slot('time')
         date_time = dateparser.parse(date_time_string).strftime("%m/%d/%Y, %H:%M:%S")
 
-        sql="INSERT INTO reservations (date, table_id, reserved_under, nr_guests) VALUES (?, ?, ?, ?);"
-        #cursor.execute(sql,(tracker.get_slot('email'), tracker.get_slot('enrollment')))
-        cursor.execute(sql,(date_time, "1", tracker.get_slot('name'), tracker.get_slot('number_guests')))
+        nr_guests_remaining = int(tracker.get_slot('number_guests'))
+        for t in range(nr_tables_needed):
+            nr_guests = 4 if nr_guests_remaining > 3 else nr_guests_remaining
+            sql="INSERT INTO reservations (date, reserved_under, nr_guests) VALUES (?, ?, ?);"
+            cursor.execute(sql,(date_time, tracker.get_slot('name'), nr_guests))
+            # Commit your changes in the database
+            conn.commit()
+            nr_guests_remaining -= 4
 
-        # Commit your changes in the database and close connection
-        conn.commit()
+        # Close connection
         conn.close()
 
         return []
