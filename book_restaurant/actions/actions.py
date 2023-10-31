@@ -21,6 +21,11 @@ import math
 nr_tables = 6
 max_nr_guests_per_table = 4
 
+# Parties <= 4 get their own table
+# Parties > 4 get the number of tables they require
+# For each reservation we store date+time as string, number of guests as integer,
+# and the name that the reservation is under (also string)
+
 def get_nr_tables_needed(number_guests):
   nr_tables_needed = math.ceil(number_guests/max_nr_guests_per_table)
   print("number_guests: {0}, nr_tables_needed: {1}".format(number_guests, nr_tables_needed))
@@ -49,6 +54,8 @@ class ActionCheckAvailability(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        # If date, time, or number_guests is missing, let's not check
+        # Instead, return the slot that should be filled next
         if tracker.get_slot('date') is None:
             return [SlotSet("next_slot_to_fill", 'date')]
         if tracker.get_slot('time') is None:
@@ -61,12 +68,13 @@ class ActionCheckAvailability(Action):
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()
 
+        # Get all reservations (note: this could be improved at some point)
         sql = "SELECT * FROM reservations"
-        #res = cursor.execute(sql, (tracker.get_slot('name'),))
         cursor.execute(sql)
         records = cursor.fetchall()
 
-        # Loop through existing bookings and count how many tables are already reserved around the given time
+        # Loop through existing bookings and count how many tables are already reserved
+        # A table counts as reserved if it is +/- 2 hours from the requested time
         booking_available = False
         date_time_request = dateparser.parse(tracker.get_slot('date') + ' ' + tracker.get_slot('time'))
         nr_reserved_tables = 0
@@ -85,7 +93,7 @@ class ActionCheckAvailability(Action):
             booking_available = True
         else:
             print("Not enough tables available")
-            dispatcher.utter_message(text="I'm sorry but there's no table available at that time. What other time would work for you?")
+            dispatcher.utter_message(text="I'm sorry but there's no table available at that time. What other time or day would work for you?")
 
         # Close connection
         conn.close()
