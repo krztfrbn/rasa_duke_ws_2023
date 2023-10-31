@@ -8,6 +8,16 @@ rules:
 #   - action: table_booking_form
 #   - active_loop: table_booking_form
 
+# - rule: Submit form
+#   condition:
+#   - active_loop: table_booking_form
+#   steps:
+#   - action: table_booking_form
+#   - active_loop: null
+#   - slot_was_set:
+#     - requested_slot: null
+#   - action: utter_confirm_slots
+
 # - rule: Say goodbye anytime the user says goodbye
 #   steps:
 #   - intent: goodbye

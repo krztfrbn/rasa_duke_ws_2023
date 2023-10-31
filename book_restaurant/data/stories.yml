@@ -2,84 +2,6 @@ version: "3.1"
 
 stories:
 
-- story: available table 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: inform
-    entities:
-    - number_guests: "two"
-  - action: action_check_availability
-  - slot_was_set:
-    - booking_available: true
-  - action: utter_confirm_availability
-  - intent: confirm_booking
-  - action: utter_inquire_name
-  - intent: inform
-    entities:
-    - name: "milos"
-  - action: action_book_appointment
-  - action: utter_final_confirmation
-  - intent: goodbye
-  - action: utter_goodbye
-
-- story: available table 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: inform
-    entities:
-    - number_guests: "five"
-  - action: action_check_availability
-  - slot_was_set:
-    - booking_available: true
-  - action: utter_confirm_availability
-  - intent: confirm_booking
-  - action: utter_inquire_name
-  - intent: inform
-    entities:
-    - name: "tess"
-  - action: action_book_appointment
-  - action: utter_final_confirmation
-  - intent: goodbye
-  - action: utter_goodbye
-
-# - story: available table 1
-#   steps:
-#   - intent: greet
-#   - action: utter_greet
-#   - intent: inform
-#   - action: table_booking_form
-# #  - action: utter_checking
-#   - action: action_check_availability
-#   - slot_was_set:
-#     - booking_available: true
-#   - action: utter_confirm_availability
-#   - intent: confirm_booking
-#   - action: action_book_appointment
-#   - action: utter_final_confirmation
-#   - intent: goodbye
-#   - action: utter_goodbye
-
-# - story: available table 2
-#   steps:
-#   - intent: greet
-#   - action: utter_greet
-#   - intent: inform
-#     entities:
-#     - number_guests: "five"
-#   - action: table_booking_form
-# #  - action: utter_checking
-#   - action: action_check_availability
-#   - slot_was_set:
-#     - booking_available: true
-#   - action: utter_confirm_availability
-#   - intent: confirm_booking
-#   - action: action_book_appointment
-#   - action: utter_final_confirmation
-#   - intent: goodbye
-#   - action: utter_goodbye
-
 # - story: available table 3
 #   steps:
 #   - intent: greet
@@ -110,15 +32,161 @@ stories:
 #   - intent: goodbye
 #   - action: utter_goodbye
 
-- story: available table 5
+# - story: available table 5
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: inform
+#   - action: table_booking_form
+#   - action: action_check_availability
+#   - slot_was_set:
+#     - booking_available: false
+#   - action: utter_nogo_atm
+#   - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+  - action: utter_ask_date_time
+  - intent: inform
+    entities:
+    - date: tomorrow
+    - time: 5pm
+  - slot_was_set:
+    - date: tomorrow
+  - slot_was_set:
+    - time: 5pm
+  - action: utter_ask_number_guests
+  - intent: inform
+    entities:
+    - time: '4'
+  - slot_was_set:
+    - time: '4'
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - slot_was_set:
+    - next_slot_to_fill: none
+  - action: utter_confirm_availability
+  - intent: confirm
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: confirm
+  - intent: goodbye
+  - action: utter_goodbye
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+  - action: utter_ask_date_time
+  - intent: inform
+    entities:
+    - date: tomorrow
+    - time: 6pm
+  - slot_was_set:
+    - date: tomorrow
+  - slot_was_set:
+    - time: 6pm
+  - action: utter_ask_number_guests
+  - intent: inform
+    entities:
+    - number_guests: three
+  - slot_was_set:
+    - number_guests: three
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - slot_was_set:
+    - next_slot_to_fill: none
+  - action: utter_confirm_availability
+  - intent: inform
+    entities:
+    - name: mike
+  - slot_was_set:
+    - name: mike
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: confirm
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+    entities:
+    - name: insel
+  - action: utter_greet
+  - intent: inform
+    entities:
+    - date: tomorrow
+  - slot_was_set:
+    - date: tomorrow
+  - action: action_check_availability
+  - slot_was_set:
+    - next_slot_to_fill: time
+  - action: utter_ask_time
+  - intent: inform
+    entities:
+    - time: 6:40pm
+  - slot_was_set:
+    - time: 6:40pm
+  - action: action_check_availability
+  - slot_was_set:
+    - next_slot_to_fill: number_guests
+  - action: utter_ask_number_guests
+  - intent: inform
+    entities:
+    - number_guests: seven
+  - action: action_check_availability
+  - action: utter_confirm_availability
+  - intent: confirm
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
   steps:
   - intent: greet
   - action: utter_greet
   - intent: inform
     entities:
-    - number_guests: "three"
+    - date: tomorrow
+  - slot_was_set:
+    - date: tomorrow
   - action: action_check_availability
   - slot_was_set:
-    - booking_available: false
-  - action: utter_nogo_atm
+    - next_slot_to_fill: time
+  - action: utter_ask_time
+  - intent: inform
+    entities:
+    - time: 7:30pm
+  - slot_was_set:
+    - time: 7:30pm
+  - action: action_check_availability
+  - slot_was_set:
+    - next_slot_to_fill: number_guests
+  - action: utter_ask_number_guests
+  - intent: inform
+    entities:
+    - number_guests: six
+  - slot_was_set:
+    - number_guests: six
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - slot_was_set:
+    - next_slot_to_fill: none
+  - action: utter_confirm_availability
+  - intent: inform
+    entities:
+    - name: mike
+  - slot_was_set:
+    - name: mike
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: goodbye
   - action: utter_goodbye

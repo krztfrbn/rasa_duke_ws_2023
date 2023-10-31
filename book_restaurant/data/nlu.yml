@@ -1,5 +1,4 @@
 version: "3.1"
-
 nlu:
 - intent: greet
   examples: |
@@ -21,7 +20,7 @@ nlu:
     - hi this is [mike](name)
     - [sonja](name) here, hello
     - hey this is [tess](name)
-
+    - hi, this is [insel](name)
 - intent: goodbye
   examples: |
     - cu
@@ -34,7 +33,9 @@ nlu:
     - see you around
     - bye bye
     - see you later
-
+    - great, thanks and bye
+    - Awesome, thanks. Bye!
+    - thanks bye
 - intent: inform
   examples: |
     - i would like to book a table
@@ -43,6 +44,7 @@ nlu:
     - [four](number_guests)
     - [two](number_guests)
     - [six](number_guests) people in total
+    - we'll be a party of [2](number_guests)
     - we will be [three](number_guests)
     - hi this is [eva](name). i would like to reserve a table for [one](number_guests)
     - [milos](name)
@@ -51,8 +53,31 @@ nlu:
     - yes
     - my name is [tom](name)
     - you can use [maria](name)
-
-- intent: confirm_booking
+    - the reservation will be under [markus](name)
+    - [tomorrow](date) at [6:30](time)
+    - [thursday](date) at [7pm](time)
+    - i'd like to reserve for [next saturday](date) at [8pm](time)
+    - on [july 1](date) at [6 pm](time)
+    - [in two days](date) at [9](time)
+    - [tomorrow](date)
+    - [monday after next](date)
+    - [6pm](time)
+    - [7:30](time)
+    - i'd like to book table
+    - [tomorrow](date) at [5pm](time)
+    - [4](number_guests)
+    - i'd like to reserve
+    - [tomorrow](date) at [6pm](time)
+    - [three](number_guests)
+    - the name is [mike](name)
+    - i'd like to book a table for [tomorrow](date)
+    - at [6:40pm](time)
+    - [seven](number_guests)
+    - i'd like to make a reservation for [tomorrow](date)
+    - what about [7:30pm](time)
+    - [six](number_guests)
+    - the name's [mike](name)
+- intent: confirm
   examples: |
     - great let's book it
     - awesome thank you
@@ -63,7 +88,9 @@ nlu:
     - yes
     - okay
     - sure
-
+    - that's correct
+    - indeed
+    - yep
 - intent: deny
   examples: |
     - no
@@ -73,7 +100,6 @@ nlu:
     - don't like that
     - no way
     - not really
-
 - intent: out_of_scope
   examples: |
     - what kind of cuisine do you have?
@@ -85,7 +111,19 @@ nlu:
     - where is your restaurant?
     - i need directions to your restaurant
     - can i talk to
-
+- regex: date
+  examples: |
+    - (?:january|february|march|april|may|june|july|august|september|october|november|december) \d+(?:st|nd|rd|th)
+    - (?:next )?(?:mon|tues|wednes|thurs|fri|satur|sun)day *(?:in a week|next week| after next)
+    - (?:one|two|three|four|five|six|seven|\d) days from now
+    - (?:today|tomorrow|day after next)
+    - in (?:one|two|three|four|five|six|seven|\d) days
+- regex: number_guests
+  examples: |
+    - \d{1,2}
+- regex: time
+  examples: |
+    - [\d\:]+(?: *[ap]m)?
 - lookup: number_guests
   examples: |
     - one
@@ -96,3 +134,8 @@ nlu:
     - six
     - seven
     - eight
+    - nine
+    - ten
+    - eleven
+    - twelve
+    - thirteen

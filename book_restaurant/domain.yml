@@ -1,19 +1,16 @@
-version: "3.1"
-
+version: '3.1'
 intents:
-  - greet
-  - goodbye
-  - inform
-  - confirm_booking
-  - deny
-
+- confirm
+- deny
+- goodbye
+- greet
+- inform
 entities:
-  - name
-  - number_guests
-  - date
-  - time
-  - table_location
-
+- number_guests
+- date
+- name
+- time
+- table_location
 slots:
   name:
     type: text
@@ -22,91 +19,114 @@ slots:
     - type: from_entity
       entity: name
   number_guests:
-    type: text
+    type: float
     influence_conversation: true
     mappings:
     - type: from_entity
       entity: number_guests
+  date:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: date
+  time:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: time
+  table_location:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: table_location
+  next_slot_to_fill:
+    type: categorical
+    influence_conversation: true
+    values:
+    - date
+    - time
+    - number_guests
+    - none
+    initial_value: date
+    mappings:
+    - type: custom
   booking_available:
     type: bool
     initial_value: false
     influence_conversation: true
     mappings:
     - type: custom
-
-# forms:
-#   table_booking_form:
-#     required_slots:
-#       - name
-#       - number_guests
-
 responses:
   utter_greet:
-    - condition:
-      - type: slot
-        name: name
-        value: null
-      text: "Maeven's bagel, how can I help you?"
-    #- text: "Hello, this is Maeven's Bagel, how can I help you?"
-    #- text: "Maeven's bagel, would you like to reserve a table?"
-    - text: "Hi {name}, this is Maeven's Bagel, how can I help you?"
-
-  utter_ask_table_booking_form_name:
-  - text: "Under what name?"
-  - text: "What's your name please?"
-  - text: "Can you give me a name for the reservation?"
-
-  utter_ask_table_booking_form_number_guests:
-  - text: "For how many guests?"
-  - text: "And how many will you be?"
-  - text: "What's the party size?"
-
+  - condition:
+    - type: slot
+      name: name
+      value: null
+    text: Maeven's bagel, how can I help you?
+  - condition:
+    - type: slot
+      name: name
+      value: null
+    text: Hello, this is Maeven's Bagel, how can I help you?
+  - text: Hi {name}, this is Maeven's Bagel, how can I help you?
+  utter_ask_date_time:
+  - text: What day and time?
+  - text: When would you like to reserve for? Please state the day and time.
+  - text: When would you like to reserve for?
+  utter_ask_date:
+  - text: On what day?
+  - text: And what time?
+  utter_ask_time:
+  - text: And what time?
+  - text: At what time please?
+  utter_ask_number_guests:
+  - text: For how many guests?
+  - text: How many people are you?
+  - text: For how many people?
+  - text: What's your party's size?
+  - text: How big is your party?
   utter_inquire_name:
-  - text: "Under what name?"
-  - text: "What's your name please?"
-  - text: "Can you give me a name for the reservation?"
-
-  utter_inquire_number_guests:
-  - text: "How many people are you?"
-  - text: "For how many people?"
-  - text: "What's your party's size?"
-  - text: "How big is your party?"
-
+  - text: Under what name?
+  - text: What's your name please?
+  - text: Can you give me a name for the reservation?
   utter_checking:
-  - text: "Okay let me check, one sec."
-  - text: "Please hold while I check our calendar."
-
+  - text: Okay let me check our availability, one sec.
+  - text: Please hold while I check our calendar.
+  utter_confirm_slots:
+  - text: Great, so you'd like to book a table for {number_guests} on {date} at {time}, correct?
   utter_confirm_availability:
-  - text: "We do have a table available for {number_guests} people. Do you want to confirm your booking?"
-  - text: "Good news! We have a table at that time. Should I put your name down?"
-
+  - text: We do have a table available for {number_guests} people at that time. Do you want to confirm your booking?
+  - text: Good news! We have a table on {date} at {time} for {number_guests} guests. What's your name?
   utter_final_confirmation:
-  - text: "Okay great you're all set for {number_guests} people. See you then, {name}!"
-  - text: "Booking for {number_guests} with the name {name} ... done!"
-  - text: "Sure, no problem. So we'll see you later."
-
+  - text: Okay great you're all set for {number_guests} people. See you then, {name}!
+  - text: Booking for {number_guests} with the name {name} ... done!
+  - text: Sure, no problem. So we'll see you later.
   utter_goodbye:
-  - text: "Bye"
-  - text: "See you then, {name} - take care!"
-  - text: "Goodbye!"
-  - text: "Take care, {name}!"
-
+  - text: Bye
+  - text: See you then, {name} - take care!
+  - text: Goodbye!
+  - text: Take care, {name}!
   utter_out_of_scope:
   - text: Sorry, I can't help you with that.
-
   utter_ask_rephrase:
   - text: I'm sorry, I didn't quite understand that. Could you please rephrase?
-
   utter_default:
   - text: I'm sorry, I'm afraid can't help you.
-
   utter_nogo_atm:
   - text: I'm sorry but you already booked with us. Please don't ever call use again.
-
 actions:
-  - action_check_availability
-  - action_book_appointment
-
+- utter_ask_number_guests
+- utter_final_confirmation
+- utter_goodbye
+- action_book_appointment
+- action_check_availability
+- utter_greet
+- utter_confirm_availability
+- utter_ask_time
+- utter_ask_date_time
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

@@ -13,6 +13,8 @@ from rasa_sdk.executor import CollectingDispatcher
 
 import sqlite3
 
+import dateparser
+
 
 
 class ActionHelloWorld(Action):
@@ -37,6 +39,13 @@ class ActionCheckAvailability(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        if tracker.get_slot('date') is None:
+            return [SlotSet("next_slot_to_fill", 'date')]
+        if tracker.get_slot('time') is None:
+            return [SlotSet("next_slot_to_fill", 'time')]
+        if tracker.get_slot('number_guests') is None:
+            return [SlotSet("next_slot_to_fill", 'number_guests')]
+
         dispatcher.utter_message(text="Let me check, please wait for a moment ...")
 
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
@@ -55,7 +64,7 @@ class ActionCheckAvailability(Action):
         # Close connection
         conn.close()
 
-        return [SlotSet("booking_available", booking_available)]
+        return [SlotSet("booking_available", booking_available), SlotSet("next_slot_to_fill", 'none')]
     
 class ActionBookAppointment(Action):
 
@@ -69,9 +78,12 @@ class ActionBookAppointment(Action):
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()
 
-        sql="INSERT INTO reservations (date, time_start, time_end, table_id, reserved_under, nr_guests) VALUES (?, ?, ?, ?, ?, ?);"
+        date_time_string = tracker.get_slot('date') + ' ' + tracker.get_slot('time')
+        date_time = dateparser.parse(date_time_string).strftime("%m/%d/%Y, %H:%M:%S")
+
+        sql="INSERT INTO reservations (date, table_id, reserved_under, nr_guests) VALUES (?, ?, ?, ?);"
         #cursor.execute(sql,(tracker.get_slot('email'), tracker.get_slot('enrollment')))
-        cursor.execute(sql,("bla", "bla", "bla", "1", tracker.get_slot('name'), tracker.get_slot('number_guests')))
+        cursor.execute(sql,(date_time, "1", tracker.get_slot('name'), tracker.get_slot('number_guests')))
 
         # Commit your changes in the database and close connection
         conn.commit()
