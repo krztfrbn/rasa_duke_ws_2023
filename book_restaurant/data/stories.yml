@@ -2,7 +2,7 @@ version: "3.1"
 
 stories:
 
-- story: interactive_story_1
+- story: try_change_of_mind_1
   steps:
   - intent: greet
   - action: utter_greet
@@ -52,9 +52,37 @@ stories:
   - intent: greet
   - action: utter_greet
   - intent: inform
+  - action: utter_ask_date_time
+  - intent: inform
+    entities:
+    - date: tomorrow
+    - time: 5pm
+  - slot_was_set:
+    - date: tomorrow
+  - slot_was_set:
+    - time: 5pm
+  - action: action_check_availability
+  - slot_was_set:
+    - next_slot_to_fill: number_guests
+  - action: utter_ask_number_guests
+  - intent: inform
+    entities:
+    - number_guests: '4'
+  - slot_was_set:
+    - number_guests: '4'
+  - action: action_check_availability
+  - slot_was_set:
+    - booking_available: true
+  - slot_was_set:
+    - next_slot_to_fill: none
+  - action: utter_confirm_availability
+  - intent: confirm
+  - action: utter_ask_name
   - intent: out_of_scope
-  - action: utter_out_of_scope
-  - intent: out_of_scope
-  - action: utter_out_of_scope
-  - intent: nlu_fallback
-  - action: utter_nogo_atm
+  - intent: inform
+    entities:
+    - name: kryztof
+  - action: action_book_appointment
+  - action: utter_final_confirmation
+  - intent: goodbye
+  - action: utter_goodbye

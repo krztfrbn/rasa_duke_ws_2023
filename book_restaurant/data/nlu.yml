@@ -77,6 +77,10 @@ nlu:
     - what about [7:30pm](time)
     - [six](number_guests)
     - the name's [mike](name)
+    - i'd like to book a table
+    - [tomorrow](date) at [5pm](time)
+    - [4](number_guests)
+    - [kryztof](name)
 - intent: confirm
   examples: |
     - great let's book it

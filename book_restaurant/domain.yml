@@ -8,10 +8,10 @@ intents:
 - nlu_fallback
 - out_of_scope
 entities:
-- number_guests
-- date
-- name
 - time
+- date
+- number_guests
+- name
 - table_location
 slots:
   name:
@@ -120,17 +120,18 @@ responses:
   utter_nogo_atm:
   - text: I'm sorry but you already booked with us. Please don't ever call use again.
 actions:
-- utter_nogo_atm
-- utter_greet
-- utter_out_of_scope
-- utter_ask_number_guests
-- utter_final_confirmation
-- utter_goodbye
+- utter_ask_name
 - action_book_appointment
-- action_check_availability
-- utter_confirm_availability
-- utter_ask_time
+- utter_ask_number_guests
 - utter_ask_date_time
+- action_check_availability
+- utter_goodbye
+- utter_confirm_availability
+- utter_final_confirmation
+- utter_greet
+- utter_nogo_atm
+- utter_out_of_scope
+- utter_ask_time
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
