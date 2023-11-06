@@ -82,4 +82,4 @@ stories:
   - slot_was_set:
     - sentiment: true
   - action: utter_nogo_atm
-  - action: utter_good_bye
+  - action: utter_goodbye
