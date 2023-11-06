@@ -74,7 +74,7 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
             # Create a specific entity 'user_unhappy' for a slot with the same name.
             # This slot can then influence the conversation.
             if res['compound'] < -0.2:
-                entity = self.convert_to_rasa("user_unhappy", True)
+                entity = self.convert_to_rasa("sentiment", True)
                 entities.append(entity)
             message.set("entities", entities, add_to_output=True)
 

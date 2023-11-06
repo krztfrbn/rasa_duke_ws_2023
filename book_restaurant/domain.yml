@@ -57,13 +57,14 @@ slots:
     influence_conversation: true
     mappings:
     - type: custom
-  user_unhappy:
+  sentiment:
     type: bool
     initial_value: false
     influence_conversation: true
     mappings:
-    - type: custom
-
+    - type: from_entity
+      entity: sentiment
+  
 responses:
   utter_greet:
   - condition:

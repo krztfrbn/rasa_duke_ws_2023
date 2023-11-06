@@ -80,6 +80,6 @@ stories:
     - booking_available: false
   - intent: inform
   - slot_was_set:
-    - user_unhappy: true
+    - sentiment: true
   - action: utter_nogo_atm
   - action: utter_good_bye
