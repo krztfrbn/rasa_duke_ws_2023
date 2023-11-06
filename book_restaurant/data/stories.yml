@@ -47,42 +47,39 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
-- story: interactive_story_1
+
+- story: upset_user_1
   steps:
   - intent: greet
   - action: utter_greet
   - intent: inform
-  - action: utter_ask_date_time
-  - intent: inform
     entities:
     - date: tomorrow
-    - time: 5pm
   - slot_was_set:
     - date: tomorrow
+  - action: action_check_availability
   - slot_was_set:
-    - time: 5pm
+    - next_slot_to_fill: time
+  - action: utter_ask_time
+  - intent: inform
+    entities:
+    - time: 7:30pm
+  - slot_was_set:
+    - time: 7:30pm
   - action: action_check_availability
   - slot_was_set:
     - next_slot_to_fill: number_guests
   - action: utter_ask_number_guests
   - intent: inform
     entities:
-    - number_guests: '4'
+    - number_guests: six
   - slot_was_set:
-    - number_guests: '4'
+    - number_guests: six
   - action: action_check_availability
   - slot_was_set:
-    - booking_available: true
-  - slot_was_set:
-    - next_slot_to_fill: none
-  - action: utter_confirm_availability
-  - intent: confirm
-  - action: utter_ask_name
-  - intent: out_of_scope
+    - booking_available: false
   - intent: inform
-    entities:
-    - name: kryztof
-  - action: action_book_appointment
-  - action: utter_final_confirmation
-  - intent: goodbye
-  - action: utter_goodbye
+  - slot_was_set:
+    - user_unhappy: true
+  - action: utter_nogo_atm
+  - action: utter_good_bye

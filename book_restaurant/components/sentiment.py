@@ -9,9 +9,12 @@ from typing import List, Type, Dict, Text, Any, Optional
 from rasa.engine.graph import ExecutionContext
 from rasa.engine.storage.resource import Resource
 from rasa.engine.storage.storage import ModelStorage
+
 from rasa.shared.nlu.training_data.message import Message
 from rasa.shared.nlu.constants import TEXT
+
 from rasa.nlu.extractors.extractor import EntityExtractorMixin
+
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 
@@ -44,7 +47,6 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
         return cls(config)
 
     def train(self, training_data: TrainingData) -> Resource:
-
         pass
 
     def convert_to_rasa(self, value, confidence):
@@ -68,6 +70,11 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
             entities = []
             for r in res:
                 entity = self.convert_to_rasa(r, res[r])
+                entities.append(entity)
+            # Create a specific entity 'user_unhappy' for a slot with the same name.
+            # This slot can then influence the conversation.
+            if res['compound'] < -0.2:
+                entity = self.convert_to_rasa("user_unhappy", True)
                 entities.append(entity)
             message.set("entities", entities, add_to_output=True)
 
