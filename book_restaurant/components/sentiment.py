@@ -49,12 +49,12 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
     def train(self, training_data: TrainingData) -> Resource:
         pass
 
-    def convert_to_rasa(self, value, confidence):
+    def convert_to_rasa(self, entity, value, confidence):
         """Convert model output into the Rasa NLU compatible output format."""
 
         entity = {"value": value,
                   "confidence": confidence,
-                  "entity": "sentiment",
+                  "entity": entity,
                   "extractor": "sentiment_extractor"}
 
         return entity
@@ -65,19 +65,9 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
         sid = SentimentIntensityAnalyzer()
         for message in messages:
             res = sid.polarity_scores(message.get(TEXT))
-            #key, value = max(res.items(), key=lambda x: x[1])
-            #entity = self.convert_to_rasa(key, value)
-            entities = []
-            for r in res:
-                entity = self.convert_to_rasa(r, res[r])
-                entities.append(entity)
-            # Create a specific entity 'user_unhappy' for a slot with the same name.
-            # This slot can then influence the conversation.
             if res['compound'] < -0.2:
-                entity = self.convert_to_rasa("sentiment", True)
-                entities.append(entity)
-            message.set("entities", entities, add_to_output=True)
-
+                entity = self.convert_to_rasa("user_happy", False, res['compound'])
+                message.set("entities", [entity], add_to_output=True)
         return messages
 
     def persist(self, file_name, model_dir):

@@ -78,8 +78,6 @@ nlu:
     - [six](number_guests)
     - the name's [mike](name)
     - i'd like to book a table
-    - [tomorrow](date) at [5pm](time)
-    - [4](number_guests)
     - [kryztof](name)
 - intent: confirm
   examples: |
@@ -117,6 +115,7 @@ nlu:
     - can i talk to
     - i'd like to know if you have vegan options on the menu?
     - Do you have vegan food? Come on, just tell me!!
+    - i hate your guts you stupid chatbot
 - intent: nlu_fallback
   examples: |
     - idiot!

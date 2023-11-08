@@ -90,7 +90,6 @@ class ActionCheckAvailability(Action):
         if nr_tables - nr_reserved_tables >= nr_tables_needed:
             booking_available = True
             print("Enough seating is available!")
-            booking_available = True
         else:
             print("Not enough tables available")
             dispatcher.utter_message(text="I'm sorry but there's no table available at that time. What other time or day would work for you?")
@@ -113,6 +112,9 @@ class ActionBookAppointment(Action):
 
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()
+
+        sql = ".tables"
+        
 
         date_time_string = tracker.get_slot('date') + ' ' + tracker.get_slot('time')
         date_time = dateparser.parse(date_time_string).strftime("%m/%d/%Y, %H:%M:%S")

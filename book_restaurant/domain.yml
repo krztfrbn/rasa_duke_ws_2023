@@ -1,5 +1,4 @@
 version: '3.1'
-
 intents:
 - confirm
 - deny
@@ -8,14 +7,12 @@ intents:
 - inform
 - nlu_fallback
 - out_of_scope
-
 entities:
+- user_happy
 - number_guests
 - date
 - name
 - time
-- sentiment
-
 slots:
   name:
     type: text
@@ -58,14 +55,13 @@ slots:
     influence_conversation: true
     mappings:
     - type: custom
-  sentiment:
+  user_happy:
     type: bool
-    initial_value: false
+    initial_value: true
     influence_conversation: true
     mappings:
     - type: from_entity
-      entity: sentiment
-
+      entity: user_happy
 responses:
   utter_greet:
   - condition:
@@ -124,20 +120,18 @@ responses:
   - text: I'm sorry, I'm afraid can't help you.
   utter_nogo_atm:
   - text: I'm sorry but I feel you are overly aggressive. I'm afraid we have to stop this conversation.
-
 actions:
-- action_book_appointment
-- action_check_availability
 - utter_nogo_atm
 - utter_greet
+- utter_goodbye
+- action_book_appointment
+- action_check_availability
 - utter_out_of_scope
 - utter_ask_number_guests
 - utter_final_confirmation
-- utter_goodbye
 - utter_confirm_availability
 - utter_ask_time
 - utter_ask_date_time
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
