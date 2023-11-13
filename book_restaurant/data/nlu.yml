@@ -116,6 +116,7 @@ nlu:
     - i'd like to know if you have vegan options on the menu?
     - Do you have vegan food? Come on, just tell me!!
     - i hate your guts you stupid chatbot
+    - i hate all chatbots and i think you're stupid
 - intent: nlu_fallback
   examples: |
     - idiot!

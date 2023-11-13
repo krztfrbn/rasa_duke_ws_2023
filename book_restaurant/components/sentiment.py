@@ -49,13 +49,16 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
     def train(self, training_data: TrainingData) -> Resource:
         pass
 
-    def convert_to_rasa(self, entity, value, confidence):
+    def convert_to_rasa(self, entity, value, confidence, text):
         """Convert model output into the Rasa NLU compatible output format."""
 
+        offset_end = len(text) - 1
         entity = {"value": value,
                   "confidence": confidence,
                   "entity": entity,
-                  "extractor": "sentiment_extractor"}
+                  "extractor": "sentiment_extractor",
+                  "start": 0,
+                  "end": offset_end}
 
         return entity
 
@@ -64,9 +67,10 @@ class SentimentAnalyzer(GraphComponent, EntityExtractorMixin):
         to the message class."""
         sid = SentimentIntensityAnalyzer()
         for message in messages:
-            res = sid.polarity_scores(message.get(TEXT))
+            text = message.get(TEXT)
+            res = sid.polarity_scores(text)
             if res['compound'] < -0.2:
-                entity = self.convert_to_rasa("user_happy", False, res['compound'])
+                entity = self.convert_to_rasa("user_happy", False, res['compound'], text)
                 message.set("entities", [entity], add_to_output=True)
         return messages
 

@@ -121,9 +121,9 @@ responses:
   utter_nogo_atm:
   - text: I'm sorry but I feel you are overly aggressive. I'm afraid we have to stop this conversation.
 actions:
+- utter_goodbye
 - utter_nogo_atm
 - utter_greet
-- utter_goodbye
 - action_book_appointment
 - action_check_availability
 - utter_out_of_scope

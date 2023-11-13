@@ -47,3 +47,15 @@ stories:
   - intent: goodbye
   - action: utter_goodbye
 
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: out_of_scope
+    entities:
+    - user_happy: false
+  - slot_was_set:
+    - user_happy: false
+  - action: utter_nogo_atm
+  - action: utter_goodbye
