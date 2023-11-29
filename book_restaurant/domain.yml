@@ -8,6 +8,7 @@ intents:
 - nlu_fallback
 - out_of_scope
 entities:
+#- user_happy
 - time
 - date
 - number_guests
@@ -61,6 +62,14 @@ slots:
     influence_conversation: true
     mappings:
     - type: custom
+  # user_happy:
+  #   type: bool
+  #   initial_value: true
+  #   influence_conversation: true
+  #   mappings:
+  #   - type: from_entity
+  #     entity: user_happy
+
 responses:
   utter_greet:
   - condition:
@@ -120,6 +129,8 @@ responses:
   utter_nogo_atm:
   - text: I'm sorry but you already booked with us. Please don't ever call use again.
 actions:
+- action_get_greeting_chatgpt
+- action_get_chitchat_chatgpt
 - utter_ask_name
 - action_book_appointment
 - utter_ask_number_guests

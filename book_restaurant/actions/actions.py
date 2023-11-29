@@ -16,6 +16,14 @@ import sqlite3
 import dateparser
 import math
 
+import os
+import openai
+
+# OpenAI API Key
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+client = openai.OpenAI()
+
 # I'm assuming the following for my restaurant:
 # 6 tables, each table for up to 4 guests
 nr_tables = 6
@@ -31,6 +39,31 @@ def get_nr_tables_needed(number_guests):
   print("number_guests: {0}, nr_tables_needed: {1}".format(number_guests, nr_tables_needed))
   return nr_tables_needed
 
+def get_greeting_from_chatgpt(user_text):
+  system_content = """You work in a restaurant called "Maeven's Bagel". 
+       Your job is to answer the phone. If the caller gives 
+       their name, then use that name in your reply. Give yourself
+       a random name as well. If the caller is insulting, ask them to be kind. """
+  completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+      {"role": "system", "content": system_content},
+      {"role": "user", "content": user_text}
+    ]
+  )
+  #print(completion)
+  return completion.choices[0].message.content
+
+def get_chitchat_from_chatgpt(user_text):
+  completion = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+      {"role": "system", "content": """You are chatting with someone on the phone."""},
+      {"role": "user", "content": user_text}
+    ]
+  )
+  return completion.choices[0].message.content
+
 
 class ActionHelloWorld(Action):
 
@@ -42,6 +75,37 @@ class ActionHelloWorld(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         dispatcher.utter_message(text="Hello World!")
+
+        return []
+
+class classActionGetGreetingChatGPT(Action):
+
+    def name(self) -> Text:
+        return "action_get_greeting_chatgpt"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    
+        user_text = tracker.latest_message['text']
+        print(user_text)
+        greeting = get_greeting_from_chatgpt(user_text)
+        dispatcher.utter_message(text=greeting)
+
+        return []
+    
+class classActionChitchatChatGPT(Action):
+
+    def name(self) -> Text:
+        return "action_get_chitchat_chatgpt"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    
+        user_text = tracker.latest_message['text']
+        chitchat = get_chitchat_from_chatgpt(user_text)
+        dispatcher.utter_message(text=chitchat)
 
         return []
 
@@ -63,7 +127,8 @@ class ActionCheckAvailability(Action):
         if tracker.get_slot('number_guests') is None:
             return [SlotSet("next_slot_to_fill", 'number_guests')]
 
-        dispatcher.utter_message(text="Let me check, please wait for a moment ...")
+        utterance = get_utterance_from_chatgpt()
+        dispatcher.utter_message(text=utterance)
 
         conn = sqlite3.connect('../sqlite/restaurant-20231024.db') 
         cursor = conn.cursor()

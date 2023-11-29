@@ -5,7 +5,7 @@ stories:
 - story: try_change_of_mind_1
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_get_greeting_chatgpt
   - intent: inform
     entities:
     - date: tomorrow
@@ -50,7 +50,7 @@ stories:
 - story: interactive_story_1
   steps:
   - intent: greet
-  - action: utter_greet
+  - action: action_get_greeting_chatgpt
   - intent: inform
   - action: utter_ask_date_time
   - intent: inform
@@ -78,7 +78,6 @@ stories:
   - action: utter_confirm_availability
   - intent: confirm
   - action: utter_ask_name
-  - intent: out_of_scope
   - intent: inform
     entities:
     - name: kryztof

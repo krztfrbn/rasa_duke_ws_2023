@@ -23,10 +23,10 @@ rules:
 #   - intent: goodbye
 #   - action: utter_goodbye
 
-# - rule: out-of-scope
-#   steps:
-#   - intent: out_of_scope
-#   - action: utter_out_of_scope
+- rule: out-of-scope
+  steps:
+  - intent: out_of_scope
+  - action: action_get_chitchat_chatgpt
 
 # - rule: Implementation of the Two-Stage-Fallback
 #   steps:
